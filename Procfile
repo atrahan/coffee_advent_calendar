@@ -1,0 +1,1 @@
+web bokeh serve --log-level=debug --port=$PORT --allow-websocket-origin=coffee-advent-calendar.herokuapp.com --use-xheaders coffeecalendar.py
