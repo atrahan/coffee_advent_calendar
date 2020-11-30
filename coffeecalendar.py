@@ -1,44 +1,80 @@
 # myapp.py
 
-from random import random
+from datetime import date
+from bokeh.models.annotations import Label
+from bokeh.models.widgets.markups import Div
+import pandas as pd
 
 from bokeh.layouts import column
-from bokeh.models import Button
+from bokeh.models import ColumnDataSource, TableColumn, DataTable
 from bokeh.palettes import RdYlBu3
 from bokeh.plotting import figure, curdoc
+from bokeh.io import export_png
 
-# create a plot and style its properties
-p = figure(x_range=(0, 100), y_range=(0, 100), toolbar_location=None)
-p.border_fill_color = 'black'
-p.background_fill_color = 'black'
+# Files
+fname_data = 'CoffeeAdventCalendarList2020.csv'
+
+# Colors
+bg_fill = "#cccccc"
+bar_fill = "#2ca25f"
+
+# Calculate daily values
+day_num = min(date.today().day - 10,25)
+
+
+page_title = Div(text='<h1>The Coffee Advent Calendar</h1>')
+
+# Create the bar
+bar_title = Div(text='<h2>Today</h2>')
+p = figure(plot_height = 75, x_range=(1, 25), y_range=(-0.5, 0.5), toolbar_location=None)
+p.border_fill_color = None
+p.background_fill_color = None
 p.outline_line_color = None
 p.grid.grid_line_color = None
 
-# add a text renderer to our plot (no data yet)
-r = p.text(x=[], y=[], text=[], text_color=[], text_font_size="26px",
-           text_baseline="middle", text_align="center")
+data = {'y' : [0],
+       'a'   : [day_num],
+       'b'   : [25 - day_num],
+       }
 
-i = 0
+p.hbar_stack(
+    stackers=['a','b'],
+    y='y',
+    height=1, 
+    color=[bar_fill, bg_fill], 
+    source=ColumnDataSource(data)
+)
+# p.Label(x = day_num/2, y=0, text=f'{day_num}!', text_color='red', text_align='center', text_font_size='16pt')
+lab = Label(
+    x = day_num/2,
+    y=0,
+    text=f'{day_num}!',
+    text_align='center',
+    text_baseline='middle',
+    text_color='red',
+    text_font_size='16pt',
+    text_font_style='bold',
+)
+p.add_layout(lab)
+p.yaxis.visible = False
 
-ds = r.data_source
+# Create the table
+data_table_title = Div(text='<h2>Previous Days</h2>')
+df_list = pd.read_csv(fname_data)
+df_list = df_list[df_list['Day']<=day_num].sort_values(by='Day',ascending=False)
+cds_list = ColumnDataSource(df_list)
+columns = [TableColumn(field=Ci, title=Ci) for Ci in df_list.columns] # bokeh columns
+data_table = DataTable(columns=columns, source=ColumnDataSource(df_list)) # bokeh table
 
-# create a callback that will add a number in a random location
-def callback():
-    global i
+# Today's info
+today_list = df_list[df_list['Day']==day_num]
+today_info = Div(text='<p style="font-size:20px">'+'</br>'.join((
+        f"{'<b>Date:</b>':<22s}December {day_num}",
+        f"{'<b>Brand:</b>':<22s}{today_list['Brand'].values[0]}",
+        f"{'<b>Description:</b>':<22s}{today_list['Description'].values[0]}",
+        f"{'<b>Roast:</b>':<22s}{today_list['Roast'].values[0]}",
+    ))+"</p>"
+)
 
-    # BEST PRACTICE --- update .data in one step with a new dict
-    new_data = dict()
-    new_data['x'] = ds.data['x'] + [random()*70 + 15]
-    new_data['y'] = ds.data['y'] + [random()*70 + 15]
-    new_data['text_color'] = ds.data['text_color'] + [RdYlBu3[i%3]]
-    new_data['text'] = ds.data['text'] + [str(i)]
-    ds.data = new_data
-
-    i = i + 1
-
-# add a button widget and configure with the call back
-button = Button(label="Press Me")
-button.on_click(callback)
-
-# put the button and plot in a layout and add to the document
-curdoc().add_root(column(button, p))
+# Document Layout
+curdoc().add_root(column(page_title, bar_title, p, today_info, data_table_title, data_table))
