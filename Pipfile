@@ -8,6 +8,7 @@ name = "pypi"
 [packages]
 bokeh = "*"
 numpy = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.6"

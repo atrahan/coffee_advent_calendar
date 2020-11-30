@@ -19,7 +19,7 @@ bg_fill = "#cccccc"
 bar_fill = "#2ca25f"
 
 # Calculate daily values
-day_num = min(date.today().day - 10,25)
+day_num = min(date.today().day,25)
 
 
 page_title = Div(text='<h1>The Coffee Advent Calendar</h1>')
