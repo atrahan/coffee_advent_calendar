@@ -19,14 +19,16 @@ bg_fill = "#cccccc"
 bar_fill = "#2ca25f"
 
 # Calculate daily values
-day_num = min(date.today().day,25)
-
+if date.today().month == 12:
+    day_num = min(date.today().day,25)
+else:
+    day_num = 1
 
 page_title = Div(text='<h1>The Coffee Advent Calendar</h1>')
 
 # Create the bar
 bar_title = Div(text='<h2>Today</h2>')
-p = figure(plot_height = 75, x_range=(1, 25), y_range=(-0.5, 0.5), toolbar_location=None)
+p = figure(plot_height = 75, x_range=(0, 25), y_range=(-0.5, 0.5), toolbar_location=None)
 p.border_fill_color = None
 p.background_fill_color = None
 p.outline_line_color = None
