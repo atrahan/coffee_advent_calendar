@@ -1,15 +1,13 @@
-# myapp.py
+# coffeecalendar.py
 
-from datetime import date
+from datetime import datetime, timedelta
 from bokeh.models.annotations import Label
 from bokeh.models.widgets.markups import Div
 import pandas as pd
 
 from bokeh.layouts import column
 from bokeh.models import ColumnDataSource, TableColumn, DataTable
-from bokeh.palettes import RdYlBu3
 from bokeh.plotting import figure, curdoc
-from bokeh.io import export_png
 
 # Files
 fname_data = 'CoffeeAdventCalendarList2020.csv'
@@ -19,10 +17,12 @@ bg_fill = "#cccccc"
 bar_fill = "#2ca25f"
 
 # Calculate daily values
-if date.today().month == 12:
-    day_num = min(date.today().day,25)
-else:
-    day_num = 1
+cur_dt = datetime.now() - timedelta(hours=8)
+day_num = min(cur_dt.day, 25)
+# if cur_dt.month == 12:
+#     day_num = min(cur_dt.day,25)
+# else:
+#     day_num = 1
 
 page_title = Div(text='<h1>The Coffee Advent Calendar</h1>')
 
@@ -79,4 +79,5 @@ today_info = Div(text='<p style="font-size:20px">'+'</br>'.join((
 )
 
 # Document Layout
-curdoc().add_root(column(page_title, bar_title, p, today_info, data_table_title, data_table))
+dash_layout = column(page_title, bar_title, p, today_info, data_table_title, data_table)
+curdoc().add_root(dash_layout)
