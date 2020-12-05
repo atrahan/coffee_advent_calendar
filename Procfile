@@ -1,1 +1,1 @@
-web bokeh serve --port=$PORT --allow-websocket-origin=coffee-advent-calendar.herokuapp.com --use-xheaders coffeecalendar
+web bokeh serve --port=$PORT --allow-websocket-origin=coffee-advent-calendar.herokuapp.com --allow-websocket-origin=test-coffee-advent-calendar.herokuapp.com --use-xheaders coffeecalendar
