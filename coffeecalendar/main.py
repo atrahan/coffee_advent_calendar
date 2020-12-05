@@ -89,7 +89,8 @@ today_logo = Div(
         (
             f'<img src="coffeecalendar/static/{logo_image}"',
             f'alt="{today_list["Brand"].values[0]}"',
-            'style="width:130px;height:130px;">',
+            'style="width:130px;height:130px"',
+            'align="middle">',
         )
     )
 )
