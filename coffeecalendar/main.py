@@ -5,12 +5,12 @@ from bokeh.models.annotations import Label
 from bokeh.models.widgets.markups import Div
 import pandas as pd
 
-from bokeh.layouts import column
+from bokeh.layouts import column, row
 from bokeh.models import ColumnDataSource, TableColumn, DataTable
 from bokeh.plotting import figure, curdoc
 
 # Files
-fname_data = 'CoffeeAdventCalendarList2020.csv'
+fname_data = 'coffeecalendar/CoffeeAdventCalendarList2020.csv'
 
 # Colors
 bg_fill = "#cccccc"
@@ -75,9 +75,26 @@ today_info = Div(text='<p style="font-size:20px">'+'</br>'.join((
         f"{'<b>Brand:</b>':<22s}{today_list['Brand'].values[0]}",
         f"{'<b>Description:</b>':<22s}{today_list['Description'].values[0]}",
         f"{'<b>Roast:</b>':<22s}{today_list['Roast'].values[0]}",
-    ))+"</p>"
+    ))+"</p>", width=468
+)
+
+logo_image = (
+    today_list['Brand'].values[0]
+    .replace(" ", "")
+    .replace("'", "")
+    + ".png"
+)
+today_logo = Div(
+    text=" ".join(
+        (
+            f'<img src="coffeecalendar/static/{logo_image}"',
+            f'alt="{today_list["Brand"].values[0]}"',
+            'style="width:152px;height:152px;">',
+        )
+    )
 )
 
 # Document Layout
-dash_layout = column(page_title, bar_title, p, today_info, data_table_title, data_table)
+dash_layout = column(
+    page_title, bar_title, p, row(today_logo, today_info, width=620), data_table_title, data_table,)
 curdoc().add_root(dash_layout)
