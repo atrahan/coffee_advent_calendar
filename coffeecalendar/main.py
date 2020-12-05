@@ -75,7 +75,7 @@ today_info = Div(text='<p style="font-size:20px">'+'</br>'.join((
         f"{'<b>Brand:</b>':<22s}{today_list['Brand'].values[0]}",
         f"{'<b>Description:</b>':<22s}{today_list['Description'].values[0]}",
         f"{'<b>Roast:</b>':<22s}{today_list['Roast'].values[0]}",
-    ))+"</p>", width=468
+    ))+"</p>", width=470
 )
 
 logo_image = (
@@ -89,12 +89,12 @@ today_logo = Div(
         (
             f'<img src="coffeecalendar/static/{logo_image}"',
             f'alt="{today_list["Brand"].values[0]}"',
-            'style="width:152px;height:152px;">',
+            'style="width:130px;height:130px;">',
         )
     )
 )
 
 # Document Layout
 dash_layout = column(
-    page_title, bar_title, p, row(today_logo, today_info, width=620), data_table_title, data_table,)
+    page_title, bar_title, p, row(today_logo, today_info, width=600), data_table_title, data_table,)
 curdoc().add_root(dash_layout)
